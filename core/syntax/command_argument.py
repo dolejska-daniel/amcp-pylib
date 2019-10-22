@@ -10,6 +10,7 @@ class CommandArgument:
     datatype_table = {
         "int": int,
         "string": str,
+        "float": float,
     }
 
     is_constant: bool = False

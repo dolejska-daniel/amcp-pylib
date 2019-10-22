@@ -20,8 +20,10 @@ class Parser:
         token = self.scanner.get_next_token()
         if token_type and token.get_type() not in token_types:
             raise RuntimeError(
-                "Received token's type ({token}) does not match any requested type: '{requested_type}'.".format(
-                    token=token, requested_type="', '".join([TokenType.to_str(t) for t in token_types])
+                "Received token's type ({token}) does not match any requested type: '{requested_type}'."
+                "Scanner's location:\n{source}\n{source_marker}".format(
+                    token=token, requested_type="', '".join([TokenType.to_str(t) for t in token_types]),
+                    source=self.scanner.get_source_part(16), source_marker="^".rjust(16, ' ')
                 )
             )
 
@@ -49,8 +51,8 @@ class Parser:
     def parse(self):
         group = CommandGroup(is_required=True)
 
-        if not self.begin_command(group):
-            raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
+#        if not self.begin_command(group):
+#            raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
 
         t: Token
         while True:
@@ -58,10 +60,7 @@ class Parser:
                 break
 
             if not self.try_group(group):
-                token = self.try_get_token(TokenType.KEYWORD)
-                if not token:
-                    raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
-
+                token = self.get_token([TokenType.KEYWORD, TokenType.CONSTANT, TokenType.CONSTANT_SPACE])
                 group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
 
         return group

@@ -9,7 +9,7 @@ class Scanner:
 
     source_position = 0
 
-    pattern = re.compile(r"(?P<keyword>[A-Z]+)"
+    pattern = re.compile(r"(?P<keyword>[A-Z_]+)"
                          r"|(?P<constant>[0-9\-]+|\s)"
                          r"|(?P<identifier>[a-z0-9_]+)"
                          r"|(?P<operators>[\[\]|{}:,])")
@@ -18,6 +18,14 @@ class Scanner:
 
     def __init__(self, source):
         self.source = source
+
+    def get_source(self) -> str:
+        return self.source
+
+    def get_source_part(self, offset) -> str:
+        offset_left = max(0, self.source_position - offset)
+        offset_right = min(len(self.source), self.source_position + offset)
+        return self.source[offset_left:offset_right]
 
     def get_next_token(self) -> Token:
         if len(self.token_stack):
@@ -40,7 +48,7 @@ class Scanner:
             if token_content_full is ' ':
                 token_type = TokenType.CONSTANT_SPACE
         elif match["identifier"]:
-            if token_content in ["int", "string"]:
+            if token_content in ["int", "string", "float"]:
                 token_type = TokenType.TYPE
             else:
                 token_type = TokenType.IDENTIFIER

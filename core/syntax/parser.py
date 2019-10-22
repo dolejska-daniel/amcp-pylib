@@ -47,7 +47,7 @@ class Parser:
         pass
 
     def parse(self):
-        group = CommandGroup()
+        group = CommandGroup(is_required=True)
 
         if not self.begin_command(group):
             raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
@@ -101,7 +101,7 @@ class Parser:
         return False
 
     def required_group(self, parent_group: CommandGroup):
-        group = CommandGroup(True)
+        group = CommandGroup(is_required=True)
         parent_group.add_group(group)
 
         self.get_token(TokenType.REQUIRED_OPEN)

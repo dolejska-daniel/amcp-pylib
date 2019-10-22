@@ -84,12 +84,12 @@ class CommandGroup:
 
         self.add_group(or_group)
         # new_group = CommandGroup(self.is_required)
-        new_group = CommandGroup(True)
+        new_group = CommandGroup(is_required=True)
         or_group.set_groups_b([new_group])
         return new_group
 
     def get_variables(self):
-        args = {arg.identifier: arg for arg in self.arguments if arg.identifier}
+        args = {arg.identifier: arg for arg in self.arguments if arg.identifier and arg.is_fillable()}
         for g in self.subgroups:
             args = {**args, **g.get_variables()}
 

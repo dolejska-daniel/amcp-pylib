@@ -65,10 +65,13 @@ class CommandGroup:
 
     def add_argument(self, name: str = None, value=None, is_constant: bool = False) -> CommandArgument:
         argument = CommandArgument(name, value, is_constant)
-        self.arguments.append(argument)
-        self.display_order.append(argument)
+        self.add_argument_object(argument)
 
         return argument
+
+    def add_argument_object(self, argument: CommandArgument):
+        self.arguments.append(argument)
+        self.display_order.append(argument)
 
     def add_group(self, group):
         self.subgroups.append(group)
@@ -76,17 +79,24 @@ class CommandGroup:
 
     def create_or_group(self):
         or_group = CommandGroupOr()
-        or_group.set_groups_a(self.subgroups)
 
-        for group in self.subgroups:
-            self.display_order.remove(group)
+        new_group_a = CommandGroup(is_required=self.is_required)
+        for x in self.display_order:
+            if isinstance(x, CommandGroup):
+                new_group_a.add_group(x)
+            elif isinstance(x, CommandArgument):
+                new_group_a.add_argument_object(x)
+
         self.subgroups = []
+        self.arguments = []
+        self.display_order = []
+
+        or_group.set_groups_a([new_group_a])
 
         self.add_group(or_group)
-        # new_group = CommandGroup(self.is_required)
-        new_group = CommandGroup(is_required=True)
-        or_group.set_groups_b([new_group])
-        return new_group
+        new_group_b = CommandGroup(is_required=True)
+        or_group.set_groups_b([new_group_b])
+        return new_group_b
 
     def get_variables(self):
         args = {arg.identifier: arg for arg in self.arguments if arg.identifier and arg.is_fillable()}

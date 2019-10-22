@@ -2,7 +2,6 @@ from .scanner import Scanner
 from .token import Token
 from .token_types import TokenType
 from .command_group import CommandGroup
-from .command_group_or import CommandGroupOr
 from .command_argument import CommandArgument
 
 

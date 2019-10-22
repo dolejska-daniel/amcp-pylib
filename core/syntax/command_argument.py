@@ -45,7 +45,7 @@ class CommandArgument:
                     allowed_type=self.required_datatype,
                 )
             )
-        elif self.required_keywords and value not in self.required_keywords:
+        elif self.required_keywords and str(value) not in self.required_keywords:
             raise RuntimeError(
                 "Value '{arg_value}' of argument '{arg_identifier}' is not valid. "
                 "Allowed values are: {allowed_values}".format(

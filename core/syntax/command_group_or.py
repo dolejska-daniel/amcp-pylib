@@ -15,14 +15,14 @@ class CommandGroupOr:
 
     def is_usable_a(self) -> bool:
         for group in self.subgroups_a:
-            if group.is_required and group.is_usable():
+            if group.is_usable():
                 return True
 
         return False
 
     def is_usable_b(self) -> bool:
         for group in self.subgroups_b:
-            if group.is_required and group.is_usable():
+            if group.is_usable():
                 return True
 
         return False

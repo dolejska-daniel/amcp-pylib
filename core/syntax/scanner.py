@@ -11,7 +11,7 @@ class Scanner:
 
     pattern = re.compile(r"(?P<keyword>[A-Z]+)"
                          r"|(?P<constant>[0-9\-]+|\s)"
-                         r"|(?P<identifier>[a-z]+)"
+                         r"|(?P<identifier>[a-z0-9_]+)"
                          r"|(?P<operators>[\[\]|{}:,])")
 
     token_stack = []

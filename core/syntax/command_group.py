@@ -1,5 +1,6 @@
 from .command_argument import CommandArgument
 from .command_group_or import CommandGroupOr
+from .token_types import TokenType
 
 
 class CommandGroup:
@@ -18,21 +19,23 @@ class CommandGroup:
         self.set_required(is_required)
 
     def __str__(self) -> str:
-#        print([(x.identifier, x.value) for x in self.display_order if isinstance(x, CommandArgument)], ", ", self.is_usable())
         if self.is_usable(True):
             return "".join([str(x) for x in self.display_order])
-#            return "".join([str(arg) for arg in self.arguments]) \
-#                   + "".join([str(g) for g in self.subgroups])
 
-        return ""
+        return "".join(
+            [str(arg) for arg in self.arguments if arg.identifier is TokenType.to_str(TokenType.CONSTANT_SPACE)]
+        )
 
     def is_usable(self, throw: bool = False) -> bool:
         for arg in self.arguments:
             if self.is_required and arg.is_fillable() and not arg.is_filled():
                 # required group has at least one unfilled
                 if throw:
-                    raise RuntimeError("Argument '{argument_name}' in required group was not filled in.".format(
-                        argument_name=arg.identifier))
+                    raise RuntimeError(
+                        "Argument '{argument_name}' in required group was not filled in.".format(
+                            argument_name=arg.identifier
+                        )
+                    )
                 return False
             elif not self.is_required and arg.is_fillable() and arg.is_filled():
                 # optional group has at least one arg filled

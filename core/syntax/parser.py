@@ -18,7 +18,7 @@ class Parser:
             token_types = [token_type]
 
         token = self.scanner.get_next_token()
-        if token_type and token.get_type() is not token_type:
+        if token_type and token.get_type() not in token_types:
             raise RuntimeError(
                 "Received token's type ({token}) does not match any requested type: '{requested_type}'.".format(
                     token=token, requested_type="', '".join([TokenType.to_str(t) for t in token_types])
@@ -49,26 +49,44 @@ class Parser:
     def parse(self):
         group = CommandGroup()
 
-        self.begin_command(group)
+        if not self.begin_command(group):
+            raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
 
         t: Token
         while True:
             if self.try_get_token(TokenType.END):
                 break
 
-            self.try_group(group)
+            if not self.try_group(group):
+                token = self.try_get_token(TokenType.KEYWORD)
+                if not token:
+                    raise RuntimeError("Failed to parse command syntax. ('{}')".format(self.scanner.source))
+
+                group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
 
         return group
 
-    def begin_command(self, group: CommandGroup):
-        # required command keyword
-        token = self.get_token(TokenType.KEYWORD)
-        group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
-        # required space
-        token = self.get_token(TokenType.CONSTANT_SPACE)
-        group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
+    def begin_command(self, group: CommandGroup) -> bool:
+        is_valid = False
+        while True:
+            # required command keyword
+            token = self.try_get_token(TokenType.KEYWORD)
+            if not token:
+                break
+            group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
 
-    def try_group(self, parent_group: CommandGroup):
+            # required space
+            token = self.get_token([TokenType.CONSTANT_SPACE, TokenType.END])
+            if token.get_type() is TokenType.END:
+                is_valid = True
+                break
+            group.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
+
+            is_valid = True
+
+        return is_valid
+
+    def try_group(self, parent_group: CommandGroup) -> bool:
         if not self.try_required_group(parent_group):
             if not self.try_optional_group(parent_group):
                 return False
@@ -155,7 +173,7 @@ class Parser:
             # type not specified by datatype name
             keywords = []
             while True:
-                t = self.get_token(TokenType.KEYWORD)
+                t = self.get_token([TokenType.KEYWORD, TokenType.CONSTANT])
                 keywords.append(t.get_content())
                 if not self.try_get_token(TokenType.OPERATOR_COMMA):
                     break

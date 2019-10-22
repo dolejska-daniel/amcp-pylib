@@ -20,6 +20,9 @@ class CommandArgument:
         self.set_value(value, is_constant)
 
     def __str__(self) -> str:
+        if self.required_datatype == "string":
+            return '"{}"'.format(str(self.value))
+
         return str(self.value)
 
     def is_fillable(self) -> bool:

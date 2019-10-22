@@ -9,20 +9,20 @@ class CommandGroupOr:
 
     def __str__(self) -> str:
         if self.is_usable_a():
-            return " ".join([str(g) for g in self.subgroups_a])
+            return "".join([str(g) for g in self.subgroups_a])
 
-        return " ".join([str(g) for g in self.subgroups_b])
+        return "".join([str(g) for g in self.subgroups_b])
 
     def is_usable_a(self) -> bool:
-        for g in self.subgroups_a:
-            if g.is_usable():
+        for group in self.subgroups_a:
+            if group.is_required and group.is_usable():
                 return True
 
         return False
 
     def is_usable_b(self) -> bool:
-        for g in self.subgroups_b:
-            if g.is_usable():
+        for group in self.subgroups_b:
+            if group.is_required and group.is_usable():
                 return True
 
         return False

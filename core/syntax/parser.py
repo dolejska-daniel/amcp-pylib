@@ -137,12 +137,7 @@ class Parser:
                 self.scanner.return_token(token)
                 self.try_group(group)
             elif token.get_type() is TokenType.OPERATOR_OR:
-                # TODO: Clean up
-                or_group = CommandGroupOr()
-                or_group.set_groups_a(group.subgroups)
-                group.subgroups = [or_group]
-                group = CommandGroup(group.is_required)
-                or_group.set_groups_b([group])
+                group = group.create_or_group()
 
     def variable_definition(self, group: CommandGroup):
         identifier = self.get_token(TokenType.IDENTIFIER)

@@ -1,4 +1,5 @@
 from .command_argument import CommandArgument
+from .command_group_or import CommandGroupOr
 
 
 class CommandGroup:
@@ -47,6 +48,13 @@ class CommandGroup:
                 # there are some usable subgroups
                 return True
 
+        if not self.is_required:
+            # group is optional
+            if len([1 for arg in self.arguments if arg.is_fillable()]) == 0 \
+                    and len([1 for group in self.subgroups if group.is_required]) == 0:
+                # but has no fillable arguments (probably only constant ones) and no required subgroups
+                return True
+
         return False
 
     def set_required(self, required=True):
@@ -62,6 +70,20 @@ class CommandGroup:
     def add_group(self, group):
         self.subgroups.append(group)
         self.display_order.append(group)
+
+    def create_or_group(self):
+        or_group = CommandGroupOr()
+        or_group.set_groups_a(self.subgroups)
+
+        for group in self.subgroups:
+            self.display_order.remove(group)
+        self.subgroups = []
+
+        self.add_group(or_group)
+        # new_group = CommandGroup(self.is_required)
+        new_group = CommandGroup(True)
+        or_group.set_groups_b([new_group])
+        return new_group
 
     def get_variables(self):
         args = {arg.identifier: arg for arg in self.arguments if arg.identifier}

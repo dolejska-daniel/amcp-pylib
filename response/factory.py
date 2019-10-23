@@ -11,7 +11,7 @@ class Factory:
 
     @staticmethod
     def create_from_bytes(data: bytes) -> Base:
-        """ . """
+        """ Creates corresponding response class instance based on input data. """
         data = data.decode("UTF-8")
 
         # Parse status code from response bytes

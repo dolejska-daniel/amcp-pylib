@@ -7,6 +7,7 @@ class Parser:
 
     @staticmethod
     def parse_response_status_header(response: str) -> (int, str, str):
+        """ Parses response code, description and data. """
         if not response:
             return 0, "EMPTY", ["SERVER SENT NO RESPONSE"]
 

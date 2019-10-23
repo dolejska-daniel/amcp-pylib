@@ -30,7 +30,9 @@ class CommandGroup:
         if self.is_usable(True):
             return "".join([str(x) for x in self.display_order])
 
-        return ""
+        return "".join(
+            [str(arg) for arg in self.arguments if arg.identifier is TokenType.to_str(TokenType.CONSTANT_SPACE)]
+        )
 
     def is_usable(self, throw: bool = False) -> bool:
         """ Validates usability of this group. Basically enforces group requirements/optionality recursively. """

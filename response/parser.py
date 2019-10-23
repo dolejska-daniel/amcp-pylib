@@ -3,7 +3,7 @@ import re
 
 class Parser:
 
-    type_pattern = re.compile(r"(?P<code>[0-9]{3})(?P<details>.+?)(ERROR|OK)\r\n")
+    type_pattern = re.compile(r"(?P<code>[0-9]{3})(?P<details>.+?)(OK|ERROR|FAILED)\r\n")
 
     @staticmethod
     def parse_response_status_header(response: str) -> (int, str, str):

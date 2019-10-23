@@ -1,15 +1,13 @@
+from .token import Token
+from .token_types import TokenType
 from .command_argument import CommandArgument
 from .command_group_or import CommandGroupOr
-from .token_types import TokenType
 
 
 class CommandGroup:
     subgroups: list = None
-
     arguments: list = None
-
     display_order: list = None
-
     is_required: bool = False
 
     def __init__(self, is_required=False):
@@ -62,6 +60,9 @@ class CommandGroup:
 
     def set_required(self, required=True):
         self.is_required = required
+
+    def add_constant_token(self, token: Token) -> CommandArgument:
+        return self.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
 
     def add_argument(self, name: str = None, value=None, is_constant: bool = False) -> CommandArgument:
         argument = CommandArgument(name, value, is_constant)

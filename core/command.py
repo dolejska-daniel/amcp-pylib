@@ -16,9 +16,19 @@ def command_syntax(syntax_rules: str):
     def decorator_command_syntax(function):
         @functools.wraps(function)
         def wrapper_command_syntax(*args, **kwargs):
+            # check provided positional arguments
+            if len(args):
+                raise RuntimeError(
+                    "Command functions do not accept any positional arguments. "
+                    "Provided positional arguments: {}".format(args)
+                )
+
+            # validate and use provided keyword arguments
             for arg_name in kwargs:
                 try:
+                    # get provided argument value
                     arg_value = Command.normalize_parameter(kwargs[arg_name])
+                    # set value to corresponding syntax-defined variable
                     command_variables[arg_name].set_value(arg_value)
                 except KeyError:
                     raise RuntimeError(
@@ -39,32 +49,36 @@ class Command:
     """
     Represents sendable AMCP protocol command.
     """
-    TERMINATOR = "\r\n"
 
+    # command terminator string
+    TERMINATOR = "\r\n"
+    # resulting command string sent to server
     command: str = None
 
     def __init__(self, command_structure: CommandGroup):
-        """ Initializes Command class. """
+        """ Initializes Command class instance. """
         self.command = str(command_structure)
 
     def __str__(self) -> str:
         """ Converts command to string. """
-        command = str(self.command)
         params = [
-            Command.normalize_command(command),
+            Command.normalize_command(self.command),
             Command.TERMINATOR,
         ]
         return "".join(params)
 
     def __bytes__(self) -> bytes:
         """ Converts command to string and then to bytes using UTF-8 encoding. """
-        print(str(self).encode("UTF-8"))
+        # print(str(self).encode("UTF-8"))
         return str(self).encode("UTF-8")
 
     @staticmethod
     def normalize_parameter(value):
+        """ Normalizes parameter values. """
         if isinstance(value, str):
+            # transform " to \"
             value = value.replace('"', '\\"')
+            # transform \ to \\
             value = value.replace('\\', '\\\\')
 
         return value
@@ -73,6 +87,7 @@ class Command:
 
     @staticmethod
     def normalize_command(command: str) -> str:
+        """ Normalizes resulting command format. """
         command = command.strip()
         command = Command.normalization_extra_whitespace.sub(' ', command)
         return command

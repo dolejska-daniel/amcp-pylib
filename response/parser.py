@@ -8,7 +8,7 @@ class Parser:
     @staticmethod
     def parse_response_status_header(response: str) -> (int, str, str):
         if not response:
-            return 0, "NO RESPONSE", "SERVER SENT NO RESPONSE"
+            return 0, "EMPTY", ["SERVER SENT NO RESPONSE"]
 
         match = Parser.type_pattern.search(response)
-        return int(match.group("code")), match.group("details").strip(), response[match.end():]
+        return int(match.group("code")), match.group("details").strip(), response[match.end():].strip().split("\r\n")

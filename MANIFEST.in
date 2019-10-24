@@ -1,0 +1,4 @@
+include *.md
+include Pipfile
+recursive-include core *.pyc
+recursive-include response *.pyc

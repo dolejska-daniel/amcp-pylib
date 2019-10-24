@@ -2,20 +2,31 @@
 
 from setuptools import setup
 
+with open("README.md", "r") as f:
+    long_description = f.read()
+
 setup(
-    name="AMCP PyLib",
+    name="amcp_pylib",
+    url="https://github.com/dolejska-daniel/amcp-pylib",
     version="0.1.0",
     author="Daniel Dolejska",
     author_email="dolejskad@gmail.com",
-    description="",
-    long_description="",
-    license="GPLv3+",
-    classifiers=(
+    description="AMCP (Advanced Media Control Protocol) Client Library",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    license="MIT",
+    packages=[
+        "core",
+        "core.syntax",
+        "module",
+        "response",
+    ],
+    classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "License :: OSI Approved :: MIT License",
         "Topic :: Multimedia :: Video",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.7",
-    ),
+        "Programming Language :: Python :: 3",
+    ],
 )

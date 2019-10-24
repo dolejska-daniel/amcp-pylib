@@ -6,8 +6,10 @@
 _TBD_
 
 
-## Downloading
-_TBD_
+## Installation
+```shell
+pip install amcp_pylib
+```
 
 
 ## Usage examples

@@ -30,6 +30,7 @@ class CommandGroup:
         if self.is_usable(True):
             return "".join([str(x) for x in self.display_order])
 
+        # render spaces between unused groups (ensures there is no syntax error due to this)
         return "".join(
             [str(arg) for arg in self.arguments if arg.identifier is TokenType.to_str(TokenType.CONSTANT_SPACE)]
         )
@@ -60,7 +61,9 @@ class CommandGroup:
 
         for group in self.subgroups:
             if group.is_required and group.is_usable():
-                # there are some usable subgroups
+                # there are some usable required subgroups
+                # optional subgroups don't matter because these would just force rendering of
+                # optional groups when there might be required arguments (which would cause error)
                 return True
 
         if len([1 for arg in self.arguments if arg.is_fillable()]) == 0 \

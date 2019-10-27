@@ -17,7 +17,8 @@ class Scanner:
     pattern = re.compile(r"(?P<keyword>[A-Z_]+)"
                          r"|(?P<constant>[0-9\-]+|\s)"
                          r"|(?P<identifier>[a-z0-9_]+)"
-                         r"|(?P<operators>[\[\]|{}:,])")
+                         r"|(?P<operators>[\[\]|{}:,])"
+                         r"|(?P<undefined>.+?)")
 
     def __init__(self, source):
         """ Initialize source scanner class. """
@@ -30,7 +31,7 @@ class Scanner:
     def get_source_part(self, offset) -> str:
         """ Returns part of input string based on current position. """
         offset_left = max(0, self.source_position - offset)
-        offset_right = min(len(self.source), self.source_position + offset)
+        offset_right = min(len(self.source), self.source_position + offset + 1)
         return self.source[offset_left:offset_right]
 
     def get_next_token(self) -> Token:

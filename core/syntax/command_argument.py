@@ -65,7 +65,7 @@ class CommandArgument:
                 )
             )
 
-    def set_value(self, value, is_constant: bool = False):
+    def set_value(self, value: any, is_constant: bool = False):
         """ Validates and sets value of this argument. """
         if self.is_constant:
             return

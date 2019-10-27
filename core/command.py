@@ -1,5 +1,6 @@
 import functools
 import re
+import json
 from core.syntax import Scanner, Parser, CommandGroup
 
 syntax_trees: dict = {}
@@ -27,7 +28,15 @@ def command_syntax(syntax_rules: str):
             for arg_name in kwargs:
                 try:
                     # get provided argument value
-                    arg_value = Command.normalize_parameter(kwargs[arg_name])
+                    arg_value = kwargs[arg_name]
+
+                    # try to convert dict and list values to JSON
+                    if isinstance(arg_value, dict) or isinstance(arg_value, list):
+                        arg_value = json.dumps(arg_value)
+
+                    # normalize argument value
+                    arg_value = Command.normalize_parameter(arg_value)
+
                     # set value to corresponding syntax-defined variable
                     command_variables[arg_name].set_value(arg_value)
                 except KeyError:
@@ -76,10 +85,10 @@ class Command:
     def normalize_parameter(value):
         """ Normalizes parameter values. """
         if isinstance(value, str):
-            # transform " to \"
-            value = value.replace('"', '\\"')
             # transform \ to \\
-            value = value.replace('\\', '\\\\')
+            value = value.replace(chr(92), chr(92) + chr(92))
+            # transform " to \"
+            value = value.replace('"', chr(92) + '"')
 
         return value
 

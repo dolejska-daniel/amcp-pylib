@@ -1,7 +1,7 @@
 import functools
 import re
 import json
-from core.syntax import Scanner, Parser, CommandGroup
+from amcp_pylib.core.syntax import Scanner, Parser, CommandGroup
 
 syntax_trees: dict = {}
 

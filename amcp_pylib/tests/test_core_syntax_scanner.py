@@ -1,7 +1,7 @@
 import unittest
-from core.syntax import Scanner
-from core.syntax.token import Token
-from core.syntax.token_types import TokenType
+from amcp_pylib.core.syntax import Scanner
+from amcp_pylib.core.syntax.token import Token
+from amcp_pylib.core.syntax.token_types import TokenType
 
 
 class CoreSyntaxScannerTestCase(unittest.TestCase):

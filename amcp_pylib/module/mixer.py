@@ -1,4 +1,4 @@
-from core import Command, command_syntax
+from amcp_pylib.core import Command, command_syntax
 
 
 @command_syntax('MIXER [video_channel:int]{-[layer:int]|-0} KEYER {[keyer:0,1]|0}')

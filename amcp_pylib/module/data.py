@@ -1,4 +1,4 @@
-from core import Command, command_syntax
+from amcp_pylib.core import Command, command_syntax
 
 
 @command_syntax('DATA STORE [name:string] [data:string]')

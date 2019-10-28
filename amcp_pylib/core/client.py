@@ -1,7 +1,7 @@
 from .connection import Connection
 from .command import Command
 
-from response import (
+from amcp_pylib.response import (
     Base as ResponseBase,
     Factory as ResponseFactory,
 )

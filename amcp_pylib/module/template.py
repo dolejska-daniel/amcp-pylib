@@ -1,4 +1,4 @@
-from core import Command, command_syntax
+from amcp_pylib.core import Command, command_syntax
 
 
 @command_syntax('CG [video_channel:int]{-[layer:int]|-9999} ADD [cg_layer:int] '

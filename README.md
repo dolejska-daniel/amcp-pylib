@@ -18,7 +18,7 @@ _TBD_
 ### Connecting to server
 
 ```python
-from core import Client
+from amcp_pylib.core import Client
 
 client = Client()
 client.connect("caspar-server.local", 6969)  # defaults to 127.0.0.1, 5250
@@ -27,8 +27,8 @@ client.connect("caspar-server.local", 6969)  # defaults to 127.0.0.1, 5250
 ### Sending commands
 
 ```python
-from core import Client
-from module.query import VERSION, BYE
+from amcp_pylib.core import Client
+from amcp_pylib.module.query import VERSION, BYE
 
 client = Client()
 client.connect()

@@ -1,4 +1,4 @@
-from core import Command, command_syntax
+from amcp_pylib.core import Command, command_syntax
 
 
 @command_syntax('THUMBNAIL LIST {[sub_directory:string]}')

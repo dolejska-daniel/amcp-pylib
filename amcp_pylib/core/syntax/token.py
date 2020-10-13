@@ -6,7 +6,7 @@ class Token:
     Class representing token instance.
     """
 
-    token_type: int = TokenType.CONSTANT
+    token_type: TokenType = TokenType.CONSTANT
     token_content: str = None
 
     def __init__(self, token_type=TokenType.UNDEFINED, token_content=""):
@@ -21,7 +21,7 @@ class Token:
             type=TokenType.to_str(self.token_type)
         )
 
-    def get_type(self) -> int:
+    def get_type(self) -> TokenType:
         """ Returns token type. """
         return self.token_type
 

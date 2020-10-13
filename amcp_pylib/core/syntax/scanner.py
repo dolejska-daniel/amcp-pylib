@@ -56,29 +56,32 @@ class Scanner:
         # match token type
         if match["keyword"]:
             token_type = TokenType.KEYWORD
+
         elif match["constant"]:
             token_type = TokenType.CONSTANT
-            if token_content_full is ' ':
+            if token_content_full == ' ':
                 token_type = TokenType.CONSTANT_SPACE
+
         elif match["identifier"]:
             if token_content in ["int", "string", "float"]:
                 token_type = TokenType.TYPE
             else:
                 token_type = TokenType.IDENTIFIER
+
         elif match["operators"]:
-            if token_content is '[':
+            if token_content == '[':
                 token_type = TokenType.REQUIRED_OPEN
-            elif token_content is ']':
+            elif token_content == ']':
                 token_type = TokenType.REQUIRED_CLOSE
-            elif token_content is '{':
+            elif token_content == '{':
                 token_type = TokenType.OPTIONAL_OPEN
-            elif token_content is '}':
+            elif token_content == '}':
                 token_type = TokenType.OPTIONAL_CLOSE
-            elif token_content is '|':
+            elif token_content == '|':
                 token_type = TokenType.OPERATOR_OR
-            elif token_content is ':':
+            elif token_content == ':':
                 token_type = TokenType.OPERATOR_TYPE
-            elif token_content is ',':
+            elif token_content == ',':
                 token_type = TokenType.OPERATOR_COMMA
 
         return Token(token_type, token_content_full)

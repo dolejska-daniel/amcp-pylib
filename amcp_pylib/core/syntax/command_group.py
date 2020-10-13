@@ -1,3 +1,5 @@
+import typing
+
 from .token import Token
 from .token_types import TokenType
 from .command_argument import CommandArgument
@@ -12,7 +14,7 @@ class CommandGroup:
     # other groups within this one
     subgroups: list = None
     # this groups arguments
-    arguments: list = None
+    arguments: typing.List[CommandArgument] = None
     # concrete order of elements within this group to be rendered
     display_order: list = None
     # is this group required?

@@ -1,5 +1,5 @@
 # Python AMCP Client Library
-> v0.1.0
+> v0.2.0
 
 
 ## Introduction
@@ -24,6 +24,15 @@ client = Client()
 client.connect("caspar-server.local", 6969)  # defaults to 127.0.0.1, 5250
 ```
 
+Support for `asyncio` module:
+```python
+import asyncio
+from amcp_pylib.core import ClientAsync
+
+client = ClientAsync()
+asyncio.new_event_loop().run_until_complete(client.connect("caspar-server.local", 6969))
+```
+
 ### Sending commands
 
 ```python
@@ -41,8 +50,8 @@ print(response)
 ```
 
 ```shell
-201(VERSION) ['2.0.7.e9fc25a Stable']
-0(EMPTY) ['SERVER SENT NO RESPONSE']
+2.0.7.e9fc25a Stable (201 - VERSION)
+SERVER SENT NO RESPONSE (0 - EMPTY)
 ```
 
 All supported protocol commands are listed and documented on CasparCG's [wiki pages](https://github.com/CasparCG/help/wiki/AMCP-Protocol#table-of-contents).

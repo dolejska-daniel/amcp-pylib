@@ -20,13 +20,13 @@ class Parser:
         """
         Gets next token from scanner. Allows to apply token type constraint.
 
-        :param token_type: [int|list]
+        :param token_type: [TokenType|list]
 
         :returns: Received token instance.
         :raises RuntimeError: Received token's type not allowed by specified constraint.
         """
         token_types = token_type
-        if isinstance(token_type, int):
+        if isinstance(token_type, TokenType):
             token_types = [token_type]
 
         token = self.scanner.get_next_token()
@@ -45,7 +45,7 @@ class Parser:
         """
         Tries to get token of specified type(s). Returns token on unsuccessful attempt (type mismatch).
 
-        :param token_type: [int|list] Requested token type(s).
+        :param token_type: [TokenType|list] Requested token type(s).
         :param return_on_success: Returns token even when token of specified type was received.
 
         :returns: True or Token instance on success (depending return_on_success). False on type mismatch.
@@ -79,7 +79,7 @@ class Parser:
         """
         self.scanner.return_token(token)
 
-    def parse(self):
+    def parse(self) -> CommandGroup:
         """
         Tries to parse syntax definition string.
 

@@ -1,29 +1,32 @@
-class TokenType:
+from enum import Enum, auto
+
+
+class TokenType(Enum):
     """
     Class holding existing token types.
     """
 
-    UNDEFINED = 0x00
-    KEYWORD = 0x01
-    CONSTANT = 0x02
-    CONSTANT_SPACE = 0x03
-    IDENTIFIER = 0x04
-    TYPE = 0x05
+    UNDEFINED = auto()
+    KEYWORD = auto()
+    CONSTANT = auto()
+    CONSTANT_SPACE = auto()
+    IDENTIFIER = auto()
+    TYPE = auto()
 
-    OPERATOR_OR = 0x0A
-    OPERATOR_TYPE = 0x0B
-    OPERATOR_COMMA = 0x0C
+    OPERATOR_OR = auto()
+    OPERATOR_TYPE = auto()
+    OPERATOR_COMMA = auto()
 
-    REQUIRED_OPEN = 0xA0
-    REQUIRED_CLOSE = 0xA1
+    REQUIRED_OPEN = auto()
+    REQUIRED_CLOSE = auto()
 
-    OPTIONAL_OPEN = 0xB0
-    OPTIONAL_CLOSE = 0xB1
+    OPTIONAL_OPEN = auto()
+    OPTIONAL_CLOSE = auto()
 
-    END = 0xFF
+    END = auto()
 
     @staticmethod
-    def to_str(token_type: int) -> str:
+    def to_str(token_type) -> str:
         """ Converts numeric token type to readable string. """
         return {
             TokenType.UNDEFINED: "undefined",

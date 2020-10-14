@@ -30,7 +30,7 @@ python:
 # Run the unit test
 script:
 #  - coverage run --source setup.py test
-  - tox -v -e py
+  - pytest
 
 #after_script:
 # Submit coverage results

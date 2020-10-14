@@ -1,13 +1,14 @@
 # Python AMCP Client Library
-> v0.2.0
+> v0.2.1
 
 
 ## Introduction
-_TBD_
+Welcome to the AMCP client library repository for Python!
+The goal of this library is to provide simple and understandable interface for communication with CasparCG server.
 
 
 ## Installation
-```shell
+```
 pip install amcp_pylib
 ```
 
@@ -50,8 +51,9 @@ print(response)
 ```
 
 ```shell
-2.0.7.e9fc25a Stable (201 - VERSION)
-SERVER SENT NO RESPONSE (0 - EMPTY)
+<SuccessResponse(data=['2.0.7.e9fc25a Stable'],    code=201, code_description='VERSION')>
+<InfoResponse(   data=['SERVER SENT NO RESPONSE'], code=0,   code_description='EMPTY')>
 ```
 
 All supported protocol commands are listed and documented on CasparCG's [wiki pages](https://github.com/CasparCG/help/wiki/AMCP-Protocol#table-of-contents).
+_Some commands may not be supported yet (in that case, please create issue (or pull ;) request)._

@@ -8,7 +8,7 @@ with open("README.md", "r") as f:
 setup(
     name="amcp_pylib",
     url="https://github.com/dolejska-daniel/amcp-pylib",
-    version="0.2.0",
+    version="0.2.1",
     author="Daniel Dolejska",
     author_email="dolejskad@gmail.com",
     description="AMCP (Advanced Media Control Protocol) Client Library",
@@ -17,12 +17,15 @@ setup(
     license="MIT",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Topic :: Multimedia :: Video",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
+        "Topic :: Multimedia :: Video",
+        "Topic :: Utilities",
     ],
 )
+
+

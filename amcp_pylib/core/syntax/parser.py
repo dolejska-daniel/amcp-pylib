@@ -1,8 +1,12 @@
+import logging
+
 from .scanner import Scanner
 from .token import Token
 from .token_types import TokenType
 from .command_group import CommandGroup
 from .command_argument import CommandArgument
+
+logger = logging.getLogger("amcp_pylib.core.syntax.parser")
 
 
 class Parser:
@@ -30,6 +34,8 @@ class Parser:
             token_types = [token_type]
 
         token = self.scanner.get_next_token()
+        logger.debug("loaded token %s", token)
+
         if token_type and token.get_type() not in token_types:
             raise RuntimeError(
                 "Received token's type ({token}) does not match any requested type: '{requested_type}'. "
@@ -51,6 +57,7 @@ class Parser:
         :returns: True or Token instance on success (depending return_on_success). False on type mismatch.
         """
         # get next token from scanner
+        logger.debug("tying to get token of type %s", token_type)
         t = self.get_token()
 
         if isinstance(token_type, list):
@@ -59,6 +66,7 @@ class Parser:
                 # mismatch
                 self.return_token(t)
                 return False
+
         elif t.get_type() is not token_type:
             # single allowed type and also mismatch
             self.return_token(t)
@@ -98,7 +106,7 @@ class Parser:
                 # if unsuccessful allow <Keyword>, <Constant> or <ConstantSpace> tokens
                 token = self.get_token([TokenType.KEYWORD, TokenType.CONSTANT, TokenType.CONSTANT_SPACE])
                 # add found tokens to main group
-                group.add_constant_token(token)
+                group.add_constant_argument(token)
 
         # return generated syntax tree root (main group)
         return group
@@ -112,6 +120,8 @@ class Parser:
         :return: True if group has been successfully parsed.
         :raises RuntimeError: Input failed to be parsed.
         """
+        # possible space before the group
+        token_space = self.try_get_token(TokenType.CONSTANT_SPACE)
         # try to find group definition opening token
         token = self.try_get_token([TokenType.REQUIRED_OPEN, TokenType.OPTIONAL_OPEN])
 
@@ -119,13 +129,22 @@ class Parser:
             # token was found and represents required group opening
             # return found token, it will be parsed by generic group parser later
             self.return_token(token)
+            # if the group is preceded by space, return the token so that group parser claims it instead
+            if token_space:
+                self.return_token(token_space)
+
             # call specific group parser
             self.required_group_definition(parent_group)
             return True
+
         elif token and token.get_type() is TokenType.OPTIONAL_OPEN:
             # token was found and represents optional group opening
             # return found token, it will be parsed by generic group parser later
             self.return_token(token)
+            # if the group is preceded by space, return the token so that group parser claims it instead
+            if token_space:
+                self.return_token(token_space)
+
             # call specific group parser
             self.optional_group_definition(parent_group)
             return True
@@ -160,7 +179,7 @@ class Parser:
             parent_group,
             open_token_type=TokenType.OPTIONAL_OPEN,
             close_token_type=TokenType.OPTIONAL_CLOSE,
-            is_required=False
+            is_required=False,
         )
 
     def group_definition(self, parent_group: CommandGroup, open_token_type, close_token_type, is_required=False):
@@ -177,17 +196,17 @@ class Parser:
         group = CommandGroup(is_required=is_required)
         parent_group.add_group(group)
 
+        # possible space preceding the group
+        token = self.try_get_token(TokenType.CONSTANT_SPACE)
+        if token:
+            group.add_constant_argument(token)
+
         # requests group open token
         self.get_token(open_token_type)
         # parses group inner contents
         self.group_inner(group)
         # requests group close token
         self.get_token(close_token_type)
-
-        # possible space
-        token = self.try_get_token(TokenType.CONSTANT_SPACE)
-        if token:
-            group.add_constant_token(token)
 
     def group_inner(self, group: CommandGroup):
         """
@@ -198,9 +217,16 @@ class Parser:
         :raises RuntimeError: Input failed to be parsed.
         """
         while True:
-            token = self.try_get_token(
-                [TokenType.KEYWORD, TokenType.CONSTANT, TokenType.CONSTANT_SPACE, TokenType.IDENTIFIER,
-                 TokenType.OPERATOR_OR, TokenType.REQUIRED_OPEN, TokenType.OPTIONAL_OPEN], True)
+            token = self.try_get_token([
+                TokenType.KEYWORD,
+                TokenType.CONSTANT,
+                TokenType.CONSTANT_SPACE,
+                TokenType.IDENTIFIER,
+                TokenType.OPERATOR_OR,
+                TokenType.REQUIRED_OPEN,
+                TokenType.OPTIONAL_OPEN
+            ], return_on_success=True)
+
             if not token:
                 break
 
@@ -209,17 +235,22 @@ class Parser:
                     or token.get_type() is TokenType.CONSTANT \
                     or token.get_type() is TokenType.CONSTANT_SPACE:
                 # keyword or constant (or space)
-                group.add_constant_token(token)
+                group.add_constant_argument(token)
+
             elif token.get_type() is TokenType.IDENTIFIER:
                 self.return_token(token)
                 # or variable
                 self.variable_definition(group)
+
             elif token.get_type() in [TokenType.REQUIRED_OPEN, TokenType.OPTIONAL_OPEN]:
                 self.return_token(token)
                 # or another group
                 self.try_group(group)
+
             elif token.get_type() is TokenType.OPERATOR_OR:
                 group = group.create_or_group()
+
+            last_token = token
 
     def variable_definition(self, group: CommandGroup):
         """
@@ -249,6 +280,7 @@ class Parser:
                     break
 
             argument.set_keyword_list(keywords)
+
         else:
             argument.set_datatype(token.get_content())
 

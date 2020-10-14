@@ -22,9 +22,9 @@ class CommandGroupOr:
 
     def get_dict_repr(self, flatten=False):
         if flatten:
-            subgroup = [sg.get_dict_repr(flatten=flatten) for sg in self.subgroups_a]
+            subgroup = [g.get_dict_repr(flatten=flatten) for g in self.subgroups_a]
             if self.is_usable_b():
-                subgroup = [sg.get_dict_repr(flatten=flatten) for sg in self.subgroups_b]
+                subgroup = [g.get_dict_repr(flatten=flatten) for g in self.subgroups_b]
 
             result = []
             for x in subgroup:
@@ -41,6 +41,15 @@ class CommandGroupOr:
             "subgroups_b": [sg.get_dict_repr() for sg in self.subgroups_b],
             "is_required": self.is_required
         }
+
+    def print_recursive_tree(self, indent: int = 0):
+        print("  " * indent + f"╠═╗ Option A [id: {indent}, required: {self.is_required}]")
+        for sg in self.subgroups_a:
+            sg.print_recursive_tree(indent + 1)
+
+        print("  " * indent + f"╠═╗ Option B [id: {indent}, required: {self.is_required}]")
+        for sg in self.subgroups_b:
+            sg.print_recursive_tree(indent + 1)
 
     def is_usable_a(self) -> bool:
         """ Validates usability of left hand side argument. """

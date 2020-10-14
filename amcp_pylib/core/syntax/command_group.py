@@ -54,6 +54,15 @@ class CommandGroup:
             "arguments": [arg.get_dict_repr() for arg in self.arguments],
         }
 
+    def print_recursive_tree(self, indent: int = 0):
+        print("  " * indent + f"╠═╗ [is_usable: {self.is_usable()}, required: {self.is_required}]")
+        for entry in self.display_order:
+            if not isinstance(entry, CommandArgument):
+                entry.print_recursive_tree(indent + 1)
+
+            else:
+                entry.print_recursive_tree(indent + 1)
+
     def is_usable(self, throw: bool = False) -> bool:
         """ Validates usability of this group. Basically enforces group requirements/optionality recursively. """
         for arg in self.arguments:
@@ -66,6 +75,7 @@ class CommandGroup:
                         )
                     )
                 return False
+
             elif not self.is_required and arg.is_fillable() and arg.is_filled():
                 # optional group has at least one filled argument
                 return True
@@ -93,7 +103,7 @@ class CommandGroup:
 
         return False
 
-    def add_constant_token(self, token: Token) -> CommandArgument:
+    def add_constant_argument(self, token: Token) -> CommandArgument:
         """ Creates constant argument from token instance and adds it to this group. """
         return self.add_argument(TokenType.to_str(token.get_type()), token.get_content(), True)
 

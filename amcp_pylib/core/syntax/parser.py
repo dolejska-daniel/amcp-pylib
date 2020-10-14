@@ -1,12 +1,8 @@
-import logging
-
 from .scanner import Scanner
 from .token import Token
 from .token_types import TokenType
 from .command_group import CommandGroup
 from .command_argument import CommandArgument
-
-logger = logging.getLogger("amcp_pylib.core.syntax.parser")
 
 
 class Parser:
@@ -34,7 +30,6 @@ class Parser:
             token_types = [token_type]
 
         token = self.scanner.get_next_token()
-        logger.debug("loaded token %s", token)
 
         if token_type and token.get_type() not in token_types:
             raise RuntimeError(
@@ -57,7 +52,6 @@ class Parser:
         :returns: True or Token instance on success (depending return_on_success). False on type mismatch.
         """
         # get next token from scanner
-        logger.debug("tying to get token of type %s", token_type)
         t = self.get_token()
 
         if isinstance(token_type, list):

@@ -38,13 +38,16 @@ class CommandGroup:
         )
 
     def get_dict_repr(self, flatten=False):
+        """ Returns command group in dictionary representation. """
         if flatten:
             result = []
             for x in self.display_order:
                 if not isinstance(x, CommandArgument):
+                    # subgroup will always return list of dicts
                     result += x.get_dict_repr(flatten=flatten)
 
                 else:
+                    # command argument will always return single dict
                     result.append(x.get_dict_repr())
 
             return result
@@ -55,6 +58,7 @@ class CommandGroup:
         }
 
     def print_recursive_tree(self, indent: int = 0):
+        """ Recursively prints command argument structure. """
         print("  " * indent + f"╠═╗ [is_usable: {self.is_usable()}, required: {self.is_required}]")
         for entry in self.display_order:
             if not isinstance(entry, CommandArgument):

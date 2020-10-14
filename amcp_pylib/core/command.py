@@ -1,10 +1,7 @@
 import functools
-import re
 import json
 
 from amcp_pylib.core.syntax import Scanner, Parser, CommandGroup
-
-syntax_trees: dict = {}
 
 
 def command_syntax(syntax_rules: str):
@@ -40,6 +37,7 @@ def command_syntax(syntax_rules: str):
 
                     # set value to corresponding syntax-defined variable
                     command_variables[arg_name].set_value(arg_value)
+
                 except KeyError:
                     raise RuntimeError(
                         "Command '{command_name}' does not accept any parameter named '{arg_identifier}'.".format(
@@ -94,12 +92,8 @@ class Command:
 
         return value
 
-    normalization_extra_whitespace = re.compile(r"\s{2,}")
-
     @staticmethod
     def normalize_command(command: str) -> str:
         """ Normalizes resulting command format. """
         command = command.strip()
-        # command = Command.normalization_extra_whitespace.sub(" ", command)
         return command
-

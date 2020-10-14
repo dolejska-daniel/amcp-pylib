@@ -1,6 +1,5 @@
 import socket
-import asyncio
-from asyncio import StreamReader, StreamWriter
+from asyncio import StreamReader, StreamWriter, open_connection
 
 from .connection_base import ConnectionBase
 
@@ -23,7 +22,7 @@ class ConnectionAsync(ConnectionBase):
 
     async def connect(self, address_family: int, address_target: tuple):
         # create required TCP socket
-        self.reader, self.writer = await asyncio.open_connection()
+        self.reader, self.writer = await open_connection()
         # connect to provided target
         await self.connect(address_family, address_target)
 

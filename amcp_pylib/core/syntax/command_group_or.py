@@ -21,17 +21,19 @@ class CommandGroupOr:
         return "".join([str(g) for g in self.subgroups_b])
 
     def get_dict_repr(self, flatten=False):
+        """ Returns command group in dictionary representation. """
         if flatten:
-            subgroup = [g.get_dict_repr(flatten=flatten) for g in self.subgroups_a]
-            if self.is_usable_b():
-                subgroup = [g.get_dict_repr(flatten=flatten) for g in self.subgroups_b]
+            subgroup = [g.get_dict_repr(flatten=flatten) for g in self.subgroups_a] if self.is_usable_a() \
+                else [g.get_dict_repr(flatten=flatten) for g in self.subgroups_b]
 
             result = []
             for x in subgroup:
                 if not isinstance(x, CommandArgument):
+                    # subgroup will always return list of dicts
                     result += x
 
                 else:
+                    # command argument will always return single dict
                     result.append(x)
 
             return result
@@ -43,6 +45,7 @@ class CommandGroupOr:
         }
 
     def print_recursive_tree(self, indent: int = 0):
+        """ Recursively prints command argument structure. """
         print("  " * indent + f"╠═╗ Option A [id: {indent}, required: {self.is_required}]")
         for sg in self.subgroups_a:
             sg.print_recursive_tree(indent + 1)

@@ -13,7 +13,7 @@ pip install amcp_pylib
 
 
 ## Usage examples
-_TBD_
+Below you can see various usage examples.
 
 ### Connecting to server
 
@@ -24,7 +24,7 @@ client = Client()
 client.connect("caspar-server.local", 6969)  # defaults to 127.0.0.1, 5250
 ```
 
-Support for `asyncio` module:
+Built-in support for `asyncio` module:
 ```python
 import asyncio
 from amcp_pylib.core import ClientAsync

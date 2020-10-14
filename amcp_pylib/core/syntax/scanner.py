@@ -1,10 +1,7 @@
-import logging
 import re
 
 from .token import Token
 from .token_types import TokenType
-
-logger = logging.getLogger("amcp_pylib.core.syntax.scanner")
 
 
 class Scanner:

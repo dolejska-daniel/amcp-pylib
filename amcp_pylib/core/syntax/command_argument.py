@@ -28,6 +28,7 @@ class CommandArgument:
         return str(self.value)
 
     def get_dict_repr(self):
+        """ Returns command argument in dictionary representation. """
         return {
             "identifier": self.identifier,
             "value": self.value,
@@ -37,6 +38,7 @@ class CommandArgument:
         }
 
     def print_recursive_tree(self, indent: int = 0):
+        """ Recursively prints command argument structure. """
         print("  " * indent + f"╟─ {self.identifier} ({self.value})")
 
     def is_fillable(self) -> bool:

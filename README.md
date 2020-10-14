@@ -1,6 +1,11 @@
 # Python AMCP Client Library
 > v0.2.1
 
+[![Build Status](https://travis-ci.org/dolejska-daniel/amcp-pylib.svg?branch=master)](https://travis-ci.org/dolejska-daniel/amcp-pylib)
+[![PyPI](https://img.shields.io/pypi/dm/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)
+[![PyPI](https://img.shields.io/pypi/l/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)
+[![Support Project](https://img.shields.io/badge/support_project-PayPal-blue.svg)](https://www.paypal.me/dolejskad)
+
 
 ## Introduction
 Welcome to the AMCP client library repository for Python!

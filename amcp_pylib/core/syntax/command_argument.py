@@ -27,6 +27,20 @@ class CommandArgument:
 
         return str(self.value)
 
+    def get_dict_repr(self):
+        """ Returns command argument in dictionary representation. """
+        return {
+            "identifier": self.identifier,
+            "value": self.value,
+            "is_constant": self.is_constant,
+            "required_keywords": self.required_keywords,
+            "required_datatype": self.required_datatype,
+        }
+
+    def print_recursive_tree(self, indent: int = 0):
+        """ Recursively prints command argument structure. """
+        print("  " * indent + f"╟─ {self.identifier} ({self.value})")
+
     def is_fillable(self) -> bool:
         """ Can value of this argument be explicitly specified? 'Is variable?' """
         return not self.is_constant

@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from .command import Command
 from .connection_base import ConnectionBase
 
-from amcp_pylib.response import Base as ResponseBase
+from amcp_pylib.response import ResponseBase as ResponseBase
 
 
 class ClientBase(metaclass=ABCMeta):

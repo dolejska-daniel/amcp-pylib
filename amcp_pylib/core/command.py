@@ -1,6 +1,7 @@
 import functools
 import re
 import json
+
 from amcp_pylib.core.syntax import Scanner, Parser, CommandGroup
 
 syntax_trees: dict = {}
@@ -66,6 +67,7 @@ class Command:
 
     def __init__(self, command_structure: CommandGroup):
         """ Initializes Command class instance. """
+        self.command_structure = command_structure
         self.command = str(command_structure)
 
     def __str__(self) -> str:
@@ -98,6 +100,6 @@ class Command:
     def normalize_command(command: str) -> str:
         """ Normalizes resulting command format. """
         command = command.strip()
-        command = Command.normalization_extra_whitespace.sub(' ', command)
+        # command = Command.normalization_extra_whitespace.sub(" ", command)
         return command
 

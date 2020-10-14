@@ -27,6 +27,15 @@ class CommandArgument:
 
         return str(self.value)
 
+    def get_dict_repr(self):
+        return {
+            "identifier": self.identifier,
+            "value": self.value,
+            "is_constant": self.is_constant,
+            "required_keywords": self.required_keywords,
+            "required_datatype": self.required_datatype,
+        }
+
     def is_fillable(self) -> bool:
         """ Can value of this argument be explicitly specified? 'Is variable?' """
         return not self.is_constant

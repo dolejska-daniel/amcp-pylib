@@ -37,6 +37,23 @@ class CommandGroup:
             [str(arg) for arg in self.arguments if arg.identifier is TokenType.to_str(TokenType.CONSTANT_SPACE)]
         )
 
+    def get_dict_repr(self, flatten=False):
+        if flatten:
+            result = []
+            for x in self.display_order:
+                if not isinstance(x, CommandArgument):
+                    result += x.get_dict_repr(flatten=flatten)
+
+                else:
+                    result.append(x.get_dict_repr())
+
+            return result
+
+        return {
+            "subgroups": [sg.get_dict_repr() for sg in self.subgroups],
+            "arguments": [arg.get_dict_repr() for arg in self.arguments],
+        }
+
     def is_usable(self, throw: bool = False) -> bool:
         """ Validates usability of this group. Basically enforces group requirements/optionality recursively. """
         for arg in self.arguments:

@@ -88,7 +88,7 @@ class Parser:
         :return: Syntax tree.
         """
         # creates initial group holding everything else
-        group = CommandGroup(is_required=True)
+        root_group = CommandGroup(is_required=True)
 
         while True:
             if self.try_get_token(TokenType.END):
@@ -96,14 +96,14 @@ class Parser:
                 break
 
             # first try to find group definition and use this group as parent
-            if not self.try_group(group):
+            if not self.try_group(root_group):
                 # if unsuccessful allow <Keyword>, <Constant> or <ConstantSpace> tokens
                 token = self.get_token([TokenType.KEYWORD, TokenType.CONSTANT, TokenType.CONSTANT_SPACE])
                 # add found tokens to main group
-                group.add_constant_argument(token)
+                root_group.add_constant_argument(token)
 
         # return generated syntax tree root (main group)
-        return group
+        return root_group
 
     def try_group(self, parent_group: CommandGroup) -> bool:
         """
@@ -142,6 +142,10 @@ class Parser:
             # call specific group parser
             self.optional_group_definition(parent_group)
             return True
+
+        # space after the group between constant keywords or values must be returned
+        if token_space:
+            self.return_token(token_space)
 
         # requested token was not found
         return False
@@ -243,8 +247,6 @@ class Parser:
 
             elif token.get_type() is TokenType.OPERATOR_OR:
                 group = group.create_or_group()
-
-            last_token = token
 
     def variable_definition(self, group: CommandGroup):
         """

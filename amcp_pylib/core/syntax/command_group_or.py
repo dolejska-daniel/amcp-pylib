@@ -46,6 +46,9 @@ class CommandGroupOr:
 
     def print_recursive_tree(self, indent: int = 0):
         """ Recursively prints command argument structure. """
+        print("  " * indent + f"╠═╗ OR [is_usable: {self.is_usable()}, required: {self.is_required}]")
+        indent += 1
+
         print("  " * indent + f"╠═╗ Option A [id: {indent}, required: {self.is_required}]")
         for sg in self.subgroups_a:
             sg.print_recursive_tree(indent + 1)

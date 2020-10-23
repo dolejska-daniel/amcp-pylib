@@ -132,19 +132,28 @@ class CommandGroup:
         """ Creates CommandGroupOr and transforms contents of this group to reflect it. """
         # create "or group" (represents implementation of '|' operator)
         or_group = CommandGroupOr()
+        # first token of the current group will be preserved for whole OR group
+        preserve_first_token = False
 
         # use all contents of this group as left hand side of operator value
         new_group_a = CommandGroup(is_required=self.is_required)
-        for x in self.display_order:
+        for _id, x in enumerate(self.display_order):
             if isinstance(x, CommandGroup):
                 new_group_a.add_group(x)
+
             elif isinstance(x, CommandArgument):
+                # first token of the group is space - this has to be preserved for whole OR group
+                # not just left-hand side
+                if _id == 0 and x.is_constant and x.value == " ":
+                    preserve_first_token = True
+                    continue
+
                 new_group_a.add_argument_object(x)
 
         # reset moved contents
         self.subgroups = []
         self.arguments = []
-        self.display_order = []
+        self.display_order = self.display_order[:1] if preserve_first_token else []
 
         # use the contents as first parameter
         or_group.set_groups_a([new_group_a])

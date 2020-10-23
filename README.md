@@ -1,5 +1,5 @@
 # Python AMCP Client Library
-> v0.2.1
+> v0.2.2
 
 [![Build Status](https://travis-ci.org/dolejska-daniel/amcp-pylib.svg?branch=master)](https://travis-ci.org/dolejska-daniel/amcp-pylib)
 [![PyPI](https://img.shields.io/pypi/dm/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)

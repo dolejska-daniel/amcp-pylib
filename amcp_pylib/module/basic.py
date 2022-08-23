@@ -37,7 +37,7 @@ def PLAY(command: Command) -> Command:
     return command
 
 
-@command_syntax('PLAY [video_channel:int]{-[layer:int]|-0}')
+@command_syntax('PAUSE [video_channel:int]{-[layer:int]|-0}')
 def PAUSE(command: Command) -> Command:
     """
     Pauses playback of the foreground clip on the specified layer.

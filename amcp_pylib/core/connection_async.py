@@ -14,17 +14,9 @@ class ConnectionAsync(ConnectionBase):
     # TCP communication writer
     writer: StreamWriter = None
 
-    def __init__(self, host: str, port: int):
-        # get necessary address information
-        address_info = socket.getaddrinfo(host, port)[0]
-        # create connection from information
-        self.connect(address_info[0], address_info[4])
-
-    async def connect(self, address_family: int, address_target: tuple):
+    async def connect(self, host: str, port: int):
         # create required TCP socket
-        self.reader, self.writer = await open_connection()
-        # connect to provided target
-        await self.connect(address_family, address_target)
+        self.reader, self.writer = await open_connection(host, port)
 
     async def disconnect(self):
         self.writer.close()

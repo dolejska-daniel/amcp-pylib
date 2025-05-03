@@ -12,7 +12,8 @@ class ClientAsync(ClientBase):
     
     async def connect(self, host: str = "127.0.0.1", port: int = 5250):
         if not self.connection:
-            self.connection = ConnectionAsync(host, port)
+            self.connection = ConnectionAsync()
+        await self.connection.connect(host, port)
 
     async def send(self, command: Command) -> ResponseBase:
         return await self.send_raw(bytes(command))

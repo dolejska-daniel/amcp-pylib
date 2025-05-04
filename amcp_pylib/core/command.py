@@ -28,6 +28,10 @@ def command_syntax(syntax_rules: str):
                     # get provided argument value
                     arg_value = kwargs[arg_name]
 
+                    # Treat arguments with a None value as if they weren't specified
+                    if arg_value is None:
+                        continue
+
                     # try to convert dict and list values to JSON
                     if isinstance(arg_value, dict) or isinstance(arg_value, list):
                         arg_value = json.dumps(arg_value)

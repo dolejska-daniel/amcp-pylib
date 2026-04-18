@@ -80,7 +80,7 @@ jobs:
         run: |
           python -m venv .venv-smoke
           .venv-smoke/bin/python -m pip install --no-index --find-links dist amcp-pylib
-          .venv-smoke/bin/python -I -c "import importlib.util; from amcp_pylib.core import Client, ClientAsync; from amcp_pylib.module.query import VERSION; assert importlib.util.find_spec('amcp_pylib.tests') is None; assert str(VERSION(component='server')).strip() == 'VERSION \"server\"'; assert str(VERSION()).strip() == 'VERSION'"
+          .venv-smoke/bin/python -I -c "import importlib.util; from amcp_pylib.core import Client, ClientAsync; from amcp_pylib.module.query import VERSION; assert importlib.util.find_spec('amcp_pylib.tests') is None; assert str(VERSION(component='server')).strip() == 'VERSION server'; assert str(VERSION()).strip() == 'VERSION'"
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4

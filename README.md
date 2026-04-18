@@ -67,7 +67,7 @@ print(response)
 ```
 
 ```shell
-<SuccessResponse(data=['2.0.7.e9fc25a Stable'], code=201, code_description='VERSION')>
+<SuccessResponse(data=['2.5.0 69e8ad5 Stable'], code=201, code_description='VERSION')>
 <InfoResponse(   data=[],                       code=0,   code_description='EMPTY')>
 ```
 

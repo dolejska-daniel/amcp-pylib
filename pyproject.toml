@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "amcp-pylib"
+version = "0.2.2"
+description = "AMCP (Advanced Media Control Protocol) Client Library"
+readme = "README.md"
+license = { file = "LICENSE.md" }
+authors = [
+    { name = "Daniel Dolejska", email = "dolejskad@gmail.com" },
+]
+requires-python = ">=3.7"
+keywords = ["amcp", "casparcg", "client", "video"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Utilities",
+]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7,<8"]
+build = ["build>=0.10", "twine>=4"]
+dev = ["build>=0.10", "pytest>=7,<8", "twine>=4"]
+
+[project.urls]
+Homepage = "https://github.com/dolejska-daniel/amcp-pylib"
+Repository = "https://github.com/dolejska-daniel/amcp-pylib"
+Issues = "https://github.com/dolejska-daniel/amcp-pylib/issues"
+
+[tool.setuptools.packages.find]
+include = ["amcp_pylib*"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra"
+testpaths = ["amcp_pylib/tests"]

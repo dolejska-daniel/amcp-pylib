@@ -46,6 +46,7 @@ Changelog = "https://github.com/dolejska-daniel/amcp-pylib/blob/master/CHANGELOG
 
 [tool.setuptools.packages.find]
 include = ["amcp_pylib*"]
+exclude = ["amcp_pylib.tests*"]
 
 [tool.setuptools_scm]
 
@@ -64,4 +65,4 @@ select = ["E4", "E7", "E9", "F"]
 [tool.pytest.ini_options]
 minversion = "7.0"
 addopts = "-ra"
-testpaths = ["amcp_pylib/tests"]
+testpaths = ["tests"]

@@ -19,6 +19,7 @@
 - Documented PEP 440-compatible release tag conventions.
 - Expanded the README quickstart and installation guidance.
 - Added CI linting, built-wheel smoke testing, and distribution artifact upload.
+- Tests now live outside the import package so wheels stay focused on runtime code.
 
 ### Fixed
 

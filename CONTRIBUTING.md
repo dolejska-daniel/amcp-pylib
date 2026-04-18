@@ -19,7 +19,7 @@ python -m pytest
 Run lint checks:
 
 ```shell
-python -m ruff check amcp_pylib
+python -m ruff check amcp_pylib tests
 ```
 
 Build source and wheel distributions:

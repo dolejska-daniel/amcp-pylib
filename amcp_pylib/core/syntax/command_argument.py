@@ -13,6 +13,7 @@ class CommandArgument:
         "int": int,
         "string": str,
         "float": float,
+        "raw": object,
     }
 
     def __init__(self, identifier: str = None, value=None, is_constant=False):
@@ -22,8 +23,14 @@ class CommandArgument:
 
     def __str__(self) -> str:
         """ Renders argument's value. """
+        if self.required_datatype == "raw":
+            if isinstance(self.value, (list, tuple)):
+                return " ".join(serialize_parameter(part) for part in self.value)
+
+            return str(self.value).strip()
+
         if self.required_datatype == "string":
-            return '"{}"'.format(str(self.value))
+            return serialize_parameter(self.value)
 
         return str(self.value)
 
@@ -70,7 +77,7 @@ class CommandArgument:
                 )
             )
 
-        elif self.required_keywords and str(value) not in self.required_keywords:
+        elif self.required_keywords and str(value).upper() not in self.required_keywords:
             raise RuntimeError(
                 "Value '{arg_value}' of argument '{arg_identifier}' is not valid. "
                 "Allowed values are: {allowed_values}".format(
@@ -87,5 +94,21 @@ class CommandArgument:
 
         self.check_value_type(value)
 
+        if self.required_keywords and value is not None:
+            value = str(value).upper()
+
         self.value = value
         self.is_constant = is_constant
+
+
+def serialize_parameter(value) -> str:
+    """Serialize one AMCP argument using CasparCG's quote and escape rules."""
+    text = str(value)
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+    must_quote = text == "" or any(ch.isspace() for ch in text) or any(ch in text for ch in '\\"')
+
+    text = text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+    if must_quote:
+        return f'"{text}"'
+
+    return text

@@ -2,9 +2,9 @@ from amcp_pylib.core import Command, command_syntax
 
 
 @command_syntax('LOADBG [channel:int]{-[layer:int]} [clip:string] {[loop:LOOP]} '
-                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE] [duration:int] {[tween:string]|LINEAR} '
-                '{[direction:LEFT,RIGHT]|RIGHT}|CUT 0} {SEEK [frame:int]} {LENGTH [frames:int]} '
-                '{FILTER [filter:string]} {[auto:AUTO]}')
+                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE,STING] [duration:int] {[tween:string]} '
+                '{[direction:LEFT,RIGHT]}} {SEEK [frame:int]} {LENGTH [frames:int]} '
+                '{FILTER [filter:string]} {[auto:AUTO]} {[clear_on_404:CLEAR_ON_404]} {[parameters:raw]}')
 def LOADBG(command: Command) -> Command:
     """
     Loads a producer in the background and prepares it for playout.
@@ -13,10 +13,10 @@ def LOADBG(command: Command) -> Command:
     return command
 
 
-@command_syntax('LOAD [video_channel:int]{-[layer:int]|-0} [clip:string] {[loop:LOOP]} '
-                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE] [duration:int] {[tween:string]|LINEAR} '
-                '{[direction:LEFT,RIGHT]|RIGHT}|CUT 0} {SEEK [frame:int]} {LENGTH [frames:int]} '
-                '{FILTER [filter:string]} {[auto:AUTO]}')
+@command_syntax('LOAD [video_channel:int]{-[layer:int]|-0} {[clip:string]} {[loop:LOOP]} '
+                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE,STING] [duration:int] {[tween:string]} '
+                '{[direction:LEFT,RIGHT]}} {SEEK [frame:int]} {LENGTH [frames:int]} '
+                '{FILTER [filter:string]} {[auto:AUTO]} {[clear_on_404:CLEAR_ON_404]} {[parameters:raw]}')
 def LOAD(command: Command) -> Command:
     """
     Loads a clip to the foreground and plays the first frame before pausing.
@@ -25,10 +25,10 @@ def LOAD(command: Command) -> Command:
     return command
 
 
-@command_syntax('PLAY [video_channel:int]{-[layer:int]|-0} [clip:string] {[loop:LOOP]} '
-                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE] [duration:int] {[tween:string]|LINEAR} '
-                '{[direction:LEFT,RIGHT]|RIGHT}|CUT 0} {SEEK [frame:int]} {LENGTH [frames:int]} '
-                '{FILTER [filter:string]} {[auto:AUTO]}')
+@command_syntax('PLAY [video_channel:int]{-[layer:int]|-0} {[clip:string]} {[loop:LOOP]} '
+                '{[transition:CUT,MIX,PUSH,WIPE,SLIDE,STING] [duration:int] {[tween:string]} '
+                '{[direction:LEFT,RIGHT]}} {SEEK [frame:int]} {LENGTH [frames:int]} '
+                '{FILTER [filter:string]} {[auto:AUTO]} {[clear_on_404:CLEAR_ON_404]} {[parameters:raw]}')
 def PLAY(command: Command) -> Command:
     """
     Moves clip from background to foreground and starts playing it.
@@ -71,10 +71,26 @@ def CLEAR(command: Command) -> Command:
     return command
 
 
-@command_syntax('CALL [video_channel:int]{-[layer:int]|-0} [param:string]')
+@command_syntax('CLEAR ALL')
+def CLEAR_ALL(command: Command) -> Command:
+    """
+    Clears foreground and background producers from all channels.
+    """
+    return command
+
+
+@command_syntax('CALL [video_channel:int]{-[layer:int]|-0} [param:raw]')
 def CALL(command: Command) -> Command:
     """
     Calls method on the specified producer with the provided param string.
+    """
+    return command
+
+
+@command_syntax('CALLBG [video_channel:int]{-[layer:int]|-0} [param:raw]')
+def CALLBG(command: Command) -> Command:
+    """
+    Calls a method on the background producer for the specified layer.
     """
     return command
 
@@ -87,7 +103,7 @@ def SWAP(command: Command) -> Command:
     return command
 
 
-@command_syntax('ADD [video_channel:int]{-[consumer_index:int]} [consumer:string] [parameters:string]')
+@command_syntax('ADD [video_channel:int]{-[consumer_index:int]} [consumer:string] {[parameters:raw]}')
 def ADD(command: Command) -> Command:
     """
     Adds a consumer to the specified video channel.
@@ -97,12 +113,20 @@ def ADD(command: Command) -> Command:
     return command
 
 
-@command_syntax('REMOVE [video_channel:int]{-[consumer_index:int]} {[parameters:string]}')
+@command_syntax('REMOVE [video_channel:int]{-[consumer_index:int]} {[parameters:raw]}')
 def REMOVE(command: Command) -> Command:
     """
     Removes an existing consumer from video_channel.
     If consumer_index is given, the consumer will be removed via its id.
     If parameters are given instead, the consumer matching those parameters will be removed.
+    """
+    return command
+
+
+@command_syntax('APPLY [video_channel:int]{-[layer:int]|-0} [param:raw]')
+def APPLY(command: Command) -> Command:
+    """
+    Applies a method to a consumer/output where supported by the server.
     """
     return command
 
@@ -145,5 +169,13 @@ def SET(command: Command) -> Command:
 def LOCK(command: Command) -> Command:
     """
     Allows for exclusive access to a channel.
+    """
+    return command
+
+
+@command_syntax('PING {[token:raw]}')
+def PING(command: Command) -> Command:
+    """
+    Checks that the AMCP parser is alive. The server replies with PONG and the optional token.
     """
     return command

@@ -1,5 +1,7 @@
 import socket
 
+from amcp_pylib.response import ResponseFactory
+
 from .connection_base import ConnectionBase
 
 
@@ -11,15 +13,16 @@ class Connection(ConnectionBase):
     # TCP communication socket
     s: socket.socket = None
 
-    def __init__(self, host: str, port: int):
+    def __init__(self, host: str, port: int, timeout: float = None):
         # get necessary address information
         address_info = socket.getaddrinfo(host, port)[0]
         # create connection from information
-        self.connect(address_info[0], address_info[4])
+        self.connect(address_info[0], address_info[4], timeout=timeout)
 
-    def connect(self, address_family: int, address_target: tuple):
+    def connect(self, address_family: int, address_target: tuple, timeout: float = None):
         # create required TCP socket
         self.s = socket.socket(address_family, socket.SOCK_STREAM)
+        self.s.settimeout(timeout)
         # connect to provided target
         self.s.connect(address_target)
 
@@ -33,8 +36,11 @@ class Connection(ConnectionBase):
         data = bytes()
         while True:
             new_data = self.s.recv(1500)
+            if not new_data:
+                break
+
             data += new_data
-            if len(new_data) < 1500:
+            if ResponseFactory.is_complete(data):
                 break
 
         return data

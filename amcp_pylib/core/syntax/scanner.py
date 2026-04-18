@@ -14,7 +14,7 @@ class Scanner:
     # stack for returned tokens
     token_stack = []
     # regex match patterns
-    pattern = re.compile(r"(?P<keyword>[A-Z_]+)"
+    pattern = re.compile(r"(?P<keyword>[A-Z_][A-Z0-9_]*)"
                          r"|(?P<constant>[0-9\-]+|\s)"
                          r"|(?P<identifier>[a-z0-9_]+)"
                          r"|(?P<operators>[\[\]|{}:,])"
@@ -65,7 +65,7 @@ class Scanner:
                 token_type = TokenType.CONSTANT_SPACE
 
         elif match["identifier"]:
-            if token_content in ["int", "string", "float"]:
+            if token_content in ["int", "string", "float", "raw"]:
                 token_type = TokenType.TYPE
             else:
                 token_type = TokenType.IDENTIFIER

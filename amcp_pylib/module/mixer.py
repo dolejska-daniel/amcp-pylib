@@ -28,10 +28,7 @@ def MIXER_CHROMA(command: Command) -> Command:
     return command
 
 
-@command_syntax('MIXER [video_channel:int]{-[layer:int]|-0} CHROMA {[enable:0,1] {[target_hue:float] [hue_width:float] '
-                '[min_saturation:float] [min_brightness:float] [softness:float] [spill_suppress:float] '
-                '[spill_suppress_saturation:float] [show_mask:0,1]}} {[duration:int] '
-                '{[tween:string]|LINEAR}|0 LINEAR}')
+@command_syntax('MIXER [video_channel:int]{-[layer:int]|-0} BLEND {[blend:string]}')
 def MIXER_BLEND(command: Command) -> Command:
     """
     Sets the blend mode to use when compositing this layer with the background.
@@ -106,7 +103,7 @@ def MIXER_CONTRAST(command: Command) -> Command:
 
 
 @command_syntax('MIXER [video_channel:int]{-[layer:int]|-0} LEVELS {[min_input:float] [max_input:float] '
-                '[gamma:float] [min_output:float] [max_output:float]{[duration:int] '
+                '[gamma:float] [min_output:float] [max_output:float] {[duration:int] '
                 '{[tween:string]|LINEAR}|0 LINEAR}}')
 def MIXER_LEVELS(command: Command) -> Command:
     """

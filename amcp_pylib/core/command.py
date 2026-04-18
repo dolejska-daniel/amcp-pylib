@@ -1,6 +1,7 @@
 import copy
 import functools
 import json
+from typing import Optional, Union
 
 from amcp_pylib.core.syntax import Scanner, Parser, CommandGroup
 
@@ -17,6 +18,7 @@ def command_syntax(syntax_rules: str):
         def wrapper_command_syntax(*args, **kwargs):
             command_syntax_tree = copy.deepcopy(result_tree)
             command_args = command_syntax_tree.get_variables()
+            request_id = kwargs.pop("request_id", None)
 
             # check provided positional arguments
             if len(args):
@@ -35,8 +37,8 @@ def command_syntax(syntax_rules: str):
                     if arg_value is None:
                         continue
 
-                    # try to convert dict and list values to JSON
-                    if isinstance(arg_value, dict) or isinstance(arg_value, list):
+                    # Try to convert structured values to JSON, except for raw argument fragments.
+                    if command_args[arg_name].required_datatype != "raw" and isinstance(arg_value, (dict, list)):
                         arg_value = json.dumps(arg_value)
 
                     # normalize argument value
@@ -52,7 +54,7 @@ def command_syntax(syntax_rules: str):
                         )
                     )
 
-            command = Command(command_syntax_tree)
+            command = Command(command_syntax_tree, request_id=request_id)
             return function(command)
 
         setattr(wrapper_command_syntax, "__command_args__", command_args)
@@ -71,16 +73,22 @@ class Command:
     TERMINATOR = "\r\n"
     # resulting command string sent to server
     command: str = None
+    request_id: Optional[str] = None
 
-    def __init__(self, command_structure: CommandGroup):
+    def __init__(self, command_structure: Union[CommandGroup, str], request_id: Optional[str] = None):
         """ Initializes Command class instance. """
         self.command_structure = command_structure
         self.command = str(command_structure)
+        self.request_id = request_id
 
     def __str__(self) -> str:
         """ Converts command to string. """
+        command = Command.normalize_command(self.command)
+        if self.request_id:
+            command = "REQ {} {}".format(Command.normalize_request_id(self.request_id), command)
+
         params = [
-            Command.normalize_command(self.command),
+            command,
             Command.TERMINATOR,
         ]
         return "".join(params)
@@ -93,16 +101,63 @@ class Command:
     @staticmethod
     def normalize_parameter(value):
         """ Normalizes parameter values. """
-        if isinstance(value, str):
-            # transform \ to \\
-            value = value.replace(chr(92), chr(92) + chr(92))
-            # transform " to \"
-            value = value.replace('"', chr(92) + '"')
-
         return value
 
     @staticmethod
     def normalize_command(command: str) -> str:
         """ Normalizes resulting command format. """
         command = command.strip()
-        return command
+        result = []
+        in_quote = False
+        previous_space = False
+        escaped = False
+
+        for char in command:
+            if escaped:
+                result.append(char)
+                escaped = False
+                previous_space = False
+                continue
+
+            if char == "\\":
+                result.append(char)
+                escaped = True
+                previous_space = False
+                continue
+
+            if char == '"':
+                in_quote = not in_quote
+                result.append(char)
+                previous_space = False
+                continue
+
+            if char.isspace() and not in_quote:
+                if not previous_space:
+                    result.append(" ")
+                    previous_space = True
+                continue
+
+            result.append(char)
+            previous_space = False
+
+        return "".join(result).strip()
+
+    @staticmethod
+    def normalize_request_id(request_id: str) -> str:
+        """Normalize an AMCP request id for the REQ prefix."""
+        request_id = str(request_id).strip()
+        if not request_id or any(ch.isspace() for ch in request_id):
+            raise RuntimeError("AMCP request_id must be a non-empty token without whitespace.")
+
+        return request_id
+
+    @classmethod
+    def raw(cls, command: str, request_id: Optional[str] = None) -> "Command":
+        """Create a command from already serialized AMCP text without the trailing CRLF."""
+        return cls(command, request_id=request_id)
+
+    def with_request_id(self, request_id: str) -> "Command":
+        """Return a copy of this command using an AMCP REQ request id prefix."""
+        clone = copy.copy(self)
+        clone.request_id = request_id
+        return clone

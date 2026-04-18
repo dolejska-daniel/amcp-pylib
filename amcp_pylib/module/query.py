@@ -157,6 +157,23 @@ def GL_GC(command: Command) -> Command:
     return command
 
 
+@command_syntax('OSC SUBSCRIBE [port:int]')
+def OSC_SUBSCRIBE(command: Command) -> Command:
+    """
+    Subscribes this AMCP client's IP address to OSC updates on the given UDP port.
+    Introduced by CasparCG Server 2.4.
+    """
+    return command
+
+
+@command_syntax('OSC UNSUBSCRIBE [port:int]')
+def OSC_UNSUBSCRIBE(command: Command) -> Command:
+    """
+    Removes this AMCP client's lifecycle-bound OSC subscription for the given UDP port.
+    """
+    return command
+
+
 @command_syntax('BYE')
 def BYE(command: Command) -> Command:
     """
@@ -204,5 +221,29 @@ def HELP_PRODUCER(command: Command) -> Command:
 def HELP_CONSUMER(command: Command) -> Command:
     """
     Shows online help for a specific consumer or a list of all consumers.
+    """
+    return command
+
+
+@command_syntax('BEGIN')
+def BEGIN(command: Command) -> Command:
+    """
+    Starts a server-side AMCP command batch. Use COMMIT or DISCARD to finish it.
+    """
+    return command
+
+
+@command_syntax('COMMIT')
+def COMMIT(command: Command) -> Command:
+    """
+    Executes the commands queued after BEGIN as a batch.
+    """
+    return command
+
+
+@command_syntax('DISCARD')
+def DISCARD(command: Command) -> Command:
+    """
+    Discards the commands queued after BEGIN.
     """
     return command

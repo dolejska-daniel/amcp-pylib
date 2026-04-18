@@ -41,6 +41,7 @@ dev = ["build>=1", "pytest>=7,<9", "setuptools-scm>=8", "twine>=6"]
 Homepage = "https://github.com/dolejska-daniel/amcp-pylib"
 Repository = "https://github.com/dolejska-daniel/amcp-pylib"
 Issues = "https://github.com/dolejska-daniel/amcp-pylib/issues"
+Changelog = "https://github.com/dolejska-daniel/amcp-pylib/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["amcp_pylib*"]

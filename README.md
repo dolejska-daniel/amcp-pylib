@@ -12,14 +12,26 @@ Welcome to the AMCP client library repository for Python!
 The goal of this library is to provide simple and understandable interface for communication with CasparCG server.
 
 ## Installation
-```
+```shell
 pip install amcp-pylib
 ```
 
 AMCP PyLib supports Python 3.9 and newer.
 
-## Usage examples
-Below you can see various usage examples.
+## Quickstart
+
+Create commands directly when you want to inspect or log the AMCP message before sending it:
+
+```python
+from amcp_pylib.module.query import VERSION
+
+command = VERSION(component="server")
+print(str(command))
+```
+
+```shell
+VERSION "server"
+```
 
 ### Connecting to server
 ```python
@@ -61,3 +73,9 @@ print(response)
 
 All supported protocol commands are listed and documented on CasparCG's [wiki pages](https://github.com/CasparCG/help/wiki/AMCP-Protocol#table-of-contents).
 _Some commands may not be supported yet (in that case, please create issue (or pull ;) request)._
+
+## Public API
+
+The stable public API is documented in [docs/public-api.md](docs/public-api.md).
+
+Most users should import clients from `amcp_pylib.core`, command factories from `amcp_pylib.module` or its command-category modules, and response base/factory classes from `amcp_pylib.response`.

@@ -10,7 +10,7 @@ def command_syntax(syntax_rules: str):
     result_tree = parser.parse()
 
     command_syntax_tree = result_tree  # copy.deepcopy(result_tree)
-    command_variables = command_syntax_tree.get_variables()
+    command_args = command_syntax_tree.get_variables()
 
     def decorator_command_syntax(function):
         @functools.wraps(function)
@@ -40,7 +40,7 @@ def command_syntax(syntax_rules: str):
                     arg_value = Command.normalize_parameter(arg_value)
 
                     # set value to corresponding syntax-defined variable
-                    command_variables[arg_name].set_value(arg_value)
+                    command_args[arg_name].set_value(arg_value)
 
                 except KeyError:
                     raise RuntimeError(
@@ -51,6 +51,8 @@ def command_syntax(syntax_rules: str):
 
             command = Command(command_syntax_tree)
             return function(command)
+
+        setattr(wrapper_command_syntax, "__command_args__", command_args)
 
         return wrapper_command_syntax
 

@@ -28,7 +28,7 @@ class ResponseBase:
     def parse_response_status_header(cls, response: str) -> (int, str, str):
         """ Parses response code, description and data. """
         if not response:
-            return 0, "EMPTY", ["SERVER SENT NO RESPONSE"]
+            return 0, "EMPTY", []
 
         match = cls.type_pattern.search(response)
         return int(match.group("code")), match.group("details").strip(), response[match.end():].strip().split("\r\n")

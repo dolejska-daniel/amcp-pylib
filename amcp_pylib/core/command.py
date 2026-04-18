@@ -55,7 +55,7 @@ def command_syntax(syntax_rules: str):
                     )
 
             command = Command(command_syntax_tree, request_id=request_id)
-            return function(command)
+            return command
 
         setattr(wrapper_command_syntax, "__command_args__", command_args)
 

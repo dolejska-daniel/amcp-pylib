@@ -48,6 +48,9 @@ Changelog = "https://github.com/dolejska-daniel/amcp-pylib/blob/master/CHANGELOG
 include = ["amcp_pylib*"]
 exclude = ["amcp_pylib.tests*"]
 
+[tool.setuptools.package-data]
+amcp_pylib = ["py.typed"]
+
 [tool.setuptools_scm]
 
 [tool.ruff]

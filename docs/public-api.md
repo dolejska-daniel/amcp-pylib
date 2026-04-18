@@ -15,14 +15,14 @@ Command construction:
 
 ```python
 from amcp_pylib.module.query import VERSION
-from amcp_pylib.module.basic import PLAY, STOP
+from amcp_pylib.module.basic import CLEAR_ALL, PLAY, STOP
 from amcp_pylib.module import BYE, INFO, LOAD, VERSION
 ```
 
 Responses:
 
 ```python
-from amcp_pylib.response import ResponseBase, ResponseFactory
+from amcp_pylib.response import ResponseBase, ResponseCodeClass, ResponseFactory
 ```
 
 Concrete response classes are available from `amcp_pylib.response.types`:
@@ -54,27 +54,37 @@ Convert it to `str` to inspect the AMCP command text or pass it to `Client.send(
 from amcp_pylib.module.query import VERSION
 
 command = VERSION(component="server")
-assert str(command) == 'VERSION "server"\r\n'
+assert str(command) == "VERSION server\r\n"
 ```
 
 ## Advanced APIs
 
-`Command` and `command_syntax` are available from `amcp_pylib.core` for custom command factories:
+`Command` and `command_syntax` are available from `amcp_pylib.core` for custom command factories and raw command escape hatches:
 
 ```python
 from amcp_pylib.core import Command, command_syntax
+
+raw = Command.raw("HELP PLAY")
+batched = raw.with_request_id("help-1")
 ```
+
+`Client.send_raw_command()` and `ClientAsync.send_raw_command()` accept already serialized AMCP command text and append `\r\n` when needed.
 
 The parser/scanner modules under `amcp_pylib.core.syntax` are implementation details for command syntax handling.
 Treat them as internal unless you are extending or debugging command parsing.
 
 ## Errors
 
-Invalid command arguments currently raise `RuntimeError`.
-Socket and connection failures come from Python's standard library networking exceptions.
+Invalid command arguments continue to raise `RuntimeError` for compatibility.
+Socket and connection failures come from Python's standard library networking exceptions, except for client misuse where no connection exists.
 
-Future releases may add more specific exception classes.
-If that happens, `RuntimeError` compatibility should be preserved for at least one minor release or documented with a migration path.
+Specific AMCP exceptions are available from `amcp_pylib.exceptions`:
+
+```python
+from amcp_pylib.exceptions import AMCPConnectionError, AMCPParseError, AMCPResponseError
+```
+
+Responses do not raise automatically. Call `response.raise_for_status()` to raise `AMCPResponseError` for 4xx and 5xx replies.
 
 ## Configuration Surface
 
@@ -82,9 +92,15 @@ The library does not currently define CLI commands, configuration files, environ
 
 ## Typing
 
-The package contains some type annotations, but it is not currently published as a PEP 561 typed package and does not include `py.typed`.
+The package includes `py.typed` for PEP 561 type-checker discovery. Coverage is intentionally strongest around public command, response, and client objects; the syntax parser internals remain less strict.
 
-Downstream users should not rely on complete type-checker coverage yet. Public APIs should be typed first before the package advertises typing support.
+## Modern CasparCG Compatibility
+
+Helpers exist for Server 2.4 additions including `CLEAR_ALL`, `CALLBG`, `CLEAR_ON_404`, `OSC_SUBSCRIBE`, `OSC_UNSUBSCRIBE`, and batching helpers `BEGIN`, `COMMIT`, and `DISCARD`.
+
+Request ids can be supplied to every command factory with `request_id="..."`. Responses preserve `response.request_id` when the server returns a `RES <id>` prefix.
+
+Some legacy documented helpers remain available even when current CasparCG source may not register the command in every release line, notably selected `INFO`/`HELP` variants. Use `Command.raw()` or `send_raw_command()` for live-server discovery and forward compatibility.
 
 ## Compatibility Policy
 

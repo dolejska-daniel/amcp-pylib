@@ -54,6 +54,13 @@ class Parser:
         # get next token from scanner
         t = self.get_token()
 
+        if not token_type:
+            if return_on_success:
+                self.return_token(t)
+                return True
+
+            return t
+
         if isinstance(token_type, list):
             # multiple allowed types
             if t.get_type() not in token_type:

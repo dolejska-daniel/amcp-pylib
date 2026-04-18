@@ -1,3 +1,4 @@
+import copy
 import functools
 import json
 
@@ -9,12 +10,14 @@ def command_syntax(syntax_rules: str):
     parser = Parser(scanner)
     result_tree = parser.parse()
 
-    command_syntax_tree = result_tree  # copy.deepcopy(result_tree)
-    command_args = command_syntax_tree.get_variables()
+    command_args = result_tree.get_variables()
 
     def decorator_command_syntax(function):
         @functools.wraps(function)
         def wrapper_command_syntax(*args, **kwargs):
+            command_syntax_tree = copy.deepcopy(result_tree)
+            command_args = command_syntax_tree.get_variables()
+
             # check provided positional arguments
             if len(args):
                 raise RuntimeError(

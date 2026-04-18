@@ -23,6 +23,8 @@ class Scanner:
     def __init__(self, source):
         """ Initialize source scanner class. """
         self.source = source
+        self.source_position = 0
+        self.token_stack = []
 
     def get_source(self) -> str:
         """ Returns whole input string. """

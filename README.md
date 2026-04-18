@@ -1,9 +1,10 @@
 # Python AMCP Client Library
-> v0.2.2
+> v0.3.0
 
-[![Build Status](https://travis-ci.org/dolejska-daniel/amcp-pylib.svg?branch=master)](https://travis-ci.org/dolejska-daniel/amcp-pylib)
+[![CI](https://github.com/dolejska-daniel/amcp-pylib/actions/workflows/ci.yml/badge.svg)](https://github.com/dolejska-daniel/amcp-pylib/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/dm/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)
 [![PyPI](https://img.shields.io/pypi/l/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)
 [![Support Project](https://img.shields.io/badge/support_project-PayPal-blue.svg)](https://www.paypal.me/dolejskad)
 
 ## Introduction
@@ -12,8 +13,10 @@ The goal of this library is to provide simple and understandable interface for c
 
 ## Installation
 ```
-pip install amcp_pylib
+pip install amcp-pylib
 ```
+
+AMCP PyLib supports Python 3.9 and newer.
 
 ## Usage examples
 Below you can see various usage examples.

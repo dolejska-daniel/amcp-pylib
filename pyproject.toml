@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "amcp-pylib"
-version = "0.2.2"
+version = "0.3.0"
 description = "AMCP (Advanced Media Control Protocol) Client Library"
 readme = "README.md"
 license = "MIT"

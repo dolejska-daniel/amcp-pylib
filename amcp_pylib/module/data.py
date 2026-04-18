@@ -16,7 +16,8 @@ def DATA_STORE(
 
     Args:
         name: Dataset name (may include path separators to create sub-directories).
-        data: Dataset content to store (typically XML or JSON).
+        data: Dataset content to store as an XML string in the CasparCG
+            ``<templateData>`` format.
         request_id: Optional AMCP request ID for command batching (REQ prefix).
     """
     ...

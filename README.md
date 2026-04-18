@@ -11,6 +11,18 @@
 Welcome to the AMCP client library repository for Python!
 The goal of this library is to provide simple and understandable interface for communication with CasparCG server.
 
+Every command is a regular Python function with **explicit, named keyword-only parameters** and **full type annotations** — including `Literal` types for enum-like arguments and keyword flags — so your editor provides accurate argument hints and catches typos before runtime.
+
+```python
+# Parameters are keyword-only, required args have no default, optional ones default to None
+LOADBG(channel=1, clip="AMB")
+PLAY(video_channel=1, layer=10, loop="LOOP")
+MIXER_FILL(video_channel=1, x=0.0, y=0.0, x_scale=0.5, y_scale=0.5)
+LOG_LEVEL(level="DEBUG")
+```
+
+![docs.png](docs/docs.png)
+
 ## Installation
 ```shell
 pip install amcp-pylib
@@ -85,21 +97,35 @@ from amcp_pylib.module.basic import LOADBG, PLAY, STOP
 client = Client()
 client.connect()
 
-client.send(LOADBG(channel=1, layer=10, clip="AMB", loop="loop", auto="auto"))
+client.send(LOADBG(channel=1, layer=10, clip="AMB", loop="LOOP", auto="AUTO"))
 client.send(PLAY(video_channel=1, layer=10))
 client.send(STOP(video_channel=1, layer=10))
 ```
 
 ### Templates and data
 
+Template data is passed as an XML string following the CasparCG `<templateData>` format.
+A named dataset can be stored once with `DATA_STORE` and then referenced by name in `CG_ADD`.
+
 ```python
 from amcp_pylib.module.data import DATA_STORE
 from amcp_pylib.module.template import CG_ADD, CG_PLAY, CG_UPDATE, CG_CLEAR
 
-client.send(DATA_STORE(name="lower-thirds/guest", data={"name": "Ada Lovelace"}))
+# Store a reusable dataset — data is an XML string
+client.send(DATA_STORE(
+    name="lower-thirds/guest",
+    data='<templateData><componentData id="name"><data id="text" value="Ada Lovelace"/></componentData></templateData>',
+))
+
+# Reference the stored dataset by name, or pass inline XML directly
 client.send(CG_ADD(video_channel=1, layer=20, cg_layer=1, template="lower-third", play_on_load=1, data="lower-thirds/guest"))
 client.send(CG_PLAY(video_channel=1, layer=20, cg_layer=1))
-client.send(CG_UPDATE(video_channel=1, layer=20, cg_layer=1, data={"name": "Grace Hopper"}))
+
+# Update with new inline XML
+client.send(CG_UPDATE(
+    video_channel=1, layer=20, cg_layer=1,
+    data='<templateData><componentData id="name"><data id="text" value="Grace Hopper"/></componentData></templateData>',
+))
 client.send(CG_CLEAR(video_channel=1, layer=20))
 ```
 
@@ -135,7 +161,7 @@ Parameters for producers and consumers can be passed as raw token lists so FFmpe
 ```python
 from amcp_pylib.module.basic import ADD, PLAY
 
-client.send(PLAY(video_channel=1, layer=1, clip="AMB", clear_on_404="clear_on_404"))
+client.send(PLAY(video_channel=1, layer=1, clip="AMB", clear_on_404="CLEAR_ON_404"))
 client.send(ADD(
     video_channel=1,
     consumer="STREAM",
@@ -162,7 +188,7 @@ Responses preserve the numeric code, request id, header text, and data lines. Ca
 from amcp_pylib.module.basic import PLAY
 from amcp_pylib.exceptions import AMCPResponseError
 
-response = client.send(PLAY(video_channel=1, clip="missing", clear_on_404="clear_on_404"))
+response = client.send(PLAY(video_channel=1, clip="missing", clear_on_404="CLEAR_ON_404"))
 try:
     response.raise_for_status()
 except AMCPResponseError as exc:

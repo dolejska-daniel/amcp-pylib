@@ -1,11 +1,17 @@
+PYTHON ?= python
+
+.PHONY: all build check clean test
 
 all: build
 
 build:
-	python3 setup.py sdist bdist_wheel
+	$(PYTHON) -m build
 
-deploy: clean build
-	twine upload dist/*
+check: build
+	$(PYTHON) -m twine check dist/*
+
+test:
+	$(PYTHON) -m pytest
 
 clean:
 	rm -Rf *.egg-info build dist

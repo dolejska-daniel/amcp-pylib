@@ -44,7 +44,9 @@ htmlcov/
 .nox/
 .venv/
 .codex-venv/
+.codex-dist/
 .codex-python/
+.codex-smoke/
 .codex-tmp/
 .coverage
 .coverage.*
@@ -102,5 +104,3 @@ dmypy.json
 
 # IDEs
 .idea/
-.codex*
-.venv

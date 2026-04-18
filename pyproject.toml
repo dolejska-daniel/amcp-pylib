@@ -1,10 +1,9 @@
 [build-system]
-requires = ["setuptools>=77.0.3", "wheel"]
+requires = ["setuptools>=77.0.3", "setuptools-scm>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "amcp-pylib"
-version = "0.3.0"
 description = "AMCP (Advanced Media Control Protocol) Client Library"
 readme = "README.md"
 license = "MIT"
@@ -31,11 +30,12 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = []
+dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pytest>=7,<9"]
-build = ["build>=1", "twine>=6"]
-dev = ["build>=1", "pytest>=7,<9", "twine>=6"]
+build = ["build>=1", "setuptools-scm>=8", "twine>=6"]
+dev = ["build>=1", "pytest>=7,<9", "setuptools-scm>=8", "twine>=6"]
 
 [project.urls]
 Homepage = "https://github.com/dolejska-daniel/amcp-pylib"
@@ -44,6 +44,8 @@ Issues = "https://github.com/dolejska-daniel/amcp-pylib/issues"
 
 [tool.setuptools.packages.find]
 include = ["amcp_pylib*"]
+
+[tool.setuptools_scm]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

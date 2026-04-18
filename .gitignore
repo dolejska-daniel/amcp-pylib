@@ -43,11 +43,7 @@ htmlcov/
 .tox/
 .nox/
 .venv/
-.codex-venv/
-.codex-dist/
-.codex-python/
-.codex-smoke/
-.codex-tmp/
+.codex-*/
 .coverage
 .coverage.*
 .cache

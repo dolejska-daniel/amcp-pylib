@@ -35,7 +35,8 @@ dynamic = ["version"]
 [project.optional-dependencies]
 test = ["pytest>=7,<9"]
 build = ["build>=1", "setuptools-scm>=8", "twine>=6"]
-dev = ["build>=1", "pytest>=7,<9", "setuptools-scm>=8", "twine>=6"]
+lint = ["ruff>=0.8"]
+dev = ["build>=1", "pytest>=7,<9", "ruff>=0.8", "setuptools-scm>=8", "twine>=6"]
 
 [project.urls]
 Homepage = "https://github.com/dolejska-daniel/amcp-pylib"
@@ -47,6 +48,18 @@ Changelog = "https://github.com/dolejska-daniel/amcp-pylib/blob/master/CHANGELOG
 include = ["amcp_pylib*"]
 
 [tool.setuptools_scm]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+# Keep the initial lint gate narrow so it catches syntax errors, import mistakes, and undefined names without forcing a broad style rewrite.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# This package module intentionally re-exports command factories from category modules as a compatibility-friendly public API.
+"amcp_pylib/module/__init__.py" = ["F403", "F405"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

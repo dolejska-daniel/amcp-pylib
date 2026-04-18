@@ -1,4 +1,3 @@
-import socket
 from asyncio import StreamReader, StreamWriter, open_connection
 
 from .connection_base import ConnectionBase

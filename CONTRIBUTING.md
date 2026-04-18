@@ -16,6 +16,12 @@ Run the test suite:
 python -m pytest
 ```
 
+Run lint checks:
+
+```shell
+python -m ruff check amcp_pylib
+```
+
 Build source and wheel distributions:
 
 ```shell
@@ -26,6 +32,13 @@ Validate distribution metadata before publishing:
 
 ```shell
 python -m twine check dist/*
+```
+
+Smoke-test the built wheel in a clean target directory:
+
+```shell
+python -m pip install --no-index --find-links dist --target .smoke amcp-pylib
+python -c "import sys; sys.path.insert(0, '.smoke'); from amcp_pylib.module.query import VERSION; assert str(VERSION()).strip() == 'VERSION'"
 ```
 
 ## Release policy
@@ -48,10 +61,12 @@ Before publishing:
 
 1. Update `README.md` and `CHANGELOG.md` for the release.
 2. Run `python -m pytest`.
-3. Run `python -m build`.
-4. Run `python -m twine check dist/*`.
-5. Tag the release with a PEP 440-compatible tag, for example `v0.3.0`.
-6. Create a GitHub Release from that tag.
+3. Run `python -m ruff check amcp_pylib`.
+4. Run `python -m build`.
+5. Run `python -m twine check dist/*`.
+6. Install the built wheel into a clean target directory and run a minimal import smoke test.
+7. Tag the release with a PEP 440-compatible tag, for example `v0.3.0`.
+8. Create a GitHub Release from that tag.
 
 The PyPI project should be configured with a trusted publisher for repository `dolejska-daniel/amcp-pylib`, workflow `python-publish.yml`, and environment `pypi`.
 The release workflow uses PyPI trusted publishing and does not require a long-lived PyPI API token.

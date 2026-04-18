@@ -10,6 +10,7 @@
 - Regression tests for scanner, parser, and command-call state isolation.
 - Tag-derived package versions with `setuptools-scm`.
 - Public API and consumer compatibility documentation.
+- Minimal Ruff lint configuration.
 
 ### Changed
 
@@ -17,6 +18,7 @@
 - Updated release publishing to validate artifacts before upload.
 - Documented PEP 440-compatible release tag conventions.
 - Expanded the README quickstart and installation guidance.
+- Added CI linting, built-wheel smoke testing, and distribution artifact upload.
 
 ### Fixed
 

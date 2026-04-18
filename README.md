@@ -1,5 +1,5 @@
 # Python AMCP Client Library
-> v0.3.0
+> v0.3.1
 
 [![CI](https://github.com/dolejska-daniel/amcp-pylib/actions/workflows/ci.yml/badge.svg)](https://github.com/dolejska-daniel/amcp-pylib/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/dm/amcp-pylib.svg)](https://pypi.org/project/amcp-pylib/)

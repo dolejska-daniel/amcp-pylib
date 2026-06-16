@@ -36,7 +36,7 @@ dynamic = ["version"]
 test = ["pytest>=7,<9"]
 build = ["build>=1", "setuptools-scm>=8", "twine>=6"]
 lint = ["ruff>=0.8"]
-dev = ["build>=1", "pytest>=7,<9", "ruff>=0.8", "setuptools-scm>=8", "twine>=6"]
+dev = ["build>=1", "pytest>=9.0.3,<10", "ruff>=0.8", "setuptools-scm>=8", "twine>=6"]
 
 [project.urls]
 Homepage = "https://github.com/dolejska-daniel/amcp-pylib"
